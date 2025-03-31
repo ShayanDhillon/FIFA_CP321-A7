@@ -13,6 +13,7 @@ unique_countries = pd.concat([Data['Winner'], Data['Second']]).unique()
 c_opts = [{'label': country, 'value': country} for country in sorted(unique_countries)]
 
 app = Dash()
+server = app.server
 
 # Requires Dash 2.17.0 or later
 app.layout = [
