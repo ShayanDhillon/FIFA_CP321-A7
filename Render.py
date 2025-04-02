@@ -1,3 +1,9 @@
+from dash import Dash, html, dcc, callback, Output, Input
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
+import numpy as np
+
 Data = pd.DataFrame({
     "Year" : [1930, 1934, 1938, 1950, 1954, 1958, 1962, 1966, 1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022],
     "Winner": ["URY", "ITA", "ITA", "URY", "DEU", "BRA", "BRA", "GBR", "BRA", "DEU", "ARG", "ITA", "ARG", "DEU", "BRA", "FRA", "BRA", "ITA", "ESP", "DEU", "FRA", "ARG"],
