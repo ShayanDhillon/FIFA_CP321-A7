@@ -1,16 +1,27 @@
-from dash import Dash, html, dcc, callback, Output, Input
-import plotly.express as px
-import plotly.graph_objects as go
-import pandas as pd
-import numpy as np
-
 Data = pd.DataFrame({
     "Year" : [1930, 1934, 1938, 1950, 1954, 1958, 1962, 1966, 1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022],
     "Winner": ["URY", "ITA", "ITA", "URY", "DEU", "BRA", "BRA", "GBR", "BRA", "DEU", "ARG", "ITA", "ARG", "DEU", "BRA", "FRA", "BRA", "ITA", "ESP", "DEU", "FRA", "ARG"],
     "Second": ["ARG", "CZE", "HUN", "BRA", "HUN", "SWE", "CZE", "DEU", "ITA", "NLD", "NLD", "DEU", "DEU", "ARG", "ITA", "BRA", "DEU", "FRA", "NLD", "ARG", "CRO", "FRA"]
 })
 unique_countries = pd.concat([Data['Winner'], Data['Second']]).unique()
-c_opts = [{'label': country, 'value': country} for country in sorted(unique_countries)]
+
+
+country_mapping = {
+    "URY": "Uruguay",
+    "ITA": "Italy",
+    "DEU": "Germany",
+    "BRA": "Brazil",
+    "GBR": "United Kingdom",
+    "ARG": "Argentina",
+    "FRA": "France",
+    "ESP": "Spain",
+    "CZE": "Czech Republic",
+    "HUN": "Hungary",
+    "SWE": "Sweden",
+    "NLD": "Netherlands",
+    "CRO": "Croatia"
+}
+c_opts = [{'label': country, 'value':country} for country in sorted(unique_countries)]
 
 app = Dash(__name__)
 server = app.server
@@ -126,13 +137,13 @@ def display_country_wins(winners, country):
     fig.add_annotation(
         xref="paper", yref="paper",
         x=0.5, y=1.1,
-        text=f"{country} has won {win_count} World Cups",
+        text=f"{country_mapping.get(country)} has won {win_count} World Cups",
         showarrow=False,
         font=dict(size=16, weight='bold')
     )
     
     fig.update_layout(
-        title=f"{country}'s World Cup History",
+        title=f"{country_mapping.get(country)}'s World Cup History",
         yaxis=dict(showticklabels=False, range=[0.9, 1.1]),
         xaxis=dict(title="Year"),
         showlegend=False,
@@ -158,7 +169,7 @@ def display_by_year(year):
             marker_line_color='green',  
             marker_line_width=1.35,
             hoverinfo="text",
-            hovertext=[f"{first}: Winner in {year}", f"{second}: Runner-up in {year}"],
+            hovertext=[f"{country_mapping.get(first)}: Winner in {year}", f"{country_mapping.get(second)}: Runner-up in {year}"],
             showscale=False
             
         )
@@ -175,8 +186,8 @@ def display_by_year(year):
         x=0.5,y=-0.1,
         xref="paper",
         yref="paper",
-        text=f"<span style='color:gold'>■</span> Winner: {first}  |  " +
-             f"<span style='color:silver'>■</span> Runner-up: {second}",
+        text=f"<span style='color:gold'>■</span> Winner: {country_mapping.get(first)}  |  " +
+             f"<span style='color:silver'>■</span> Runner-up: {country_mapping.get(second)}",
         showarrow=False,
         font=dict(size=16),
         align="center"
